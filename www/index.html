@@ -17,11 +17,12 @@
     specific language governing permissions and limitations
     under the License.
 -->
-<html>
+
+<!-- <html>
     <head>
         <meta charset="utf-8" />
         <meta name="format-detection" content="telephone=no" />
-        <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
+        WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
         <link rel="stylesheet" type="text/css" href="css/index.css" />
         <title>Hello World</title>
@@ -40,4 +41,274 @@
             app.initialize();
         </script>
     </body>
+</html> -->
+
+
+<html>
+<head>
+<meta charset ="UTF-8">
+<title>카드게임 TEST</title>
+</head>
+<body>
+     <script>
+"use strict" ;
+//- 사용: 생성자함수.prototype
+function NewCardGame(max) {
+      if(max <= 3){
+             alert( '4장의 카드부터 게임할 수 있습니다. 다시 입력해 주세요.');
+             return false ;
+      } else if (max > 100){
+             alert( '100보다 작은수를 입력하셔야 합니다.' );
+             return false ;
+          
+      }
+    this.max = max;               // 총 카드 수
+    this.half = max/2;            // 총 카드 수의 반
+    this.clickNum = 1;            // 카드 클릭 수저장(2회까지)
+    this.maxArr = new Array(max); // 난수 저장 배열
+    this.realArr = new Array();   // 게임에 사용될 숫자 배열
+    this.matchArr = new Array();  // 짝이될 카드 저장될 배열
+    this.matchChk = new Array();  // 작이될 카드 비교저장할
+    this.cardPosition = new Array(); // 카드 위치 정보 저장
+    this.cardMaxPX = 11; // X축 총 11장 이미지까지,8*5(뒷장이미지 고정임)
+    this.cardMaxPY = 5;  // Y축 총 5장 이미지까지, max 50장까지로 정함
+    this.cardPositionXY = '';
+    this.cardPX = ''; // X축으로 이동할 거리를 저장할 곳
+    this.cardPY = ''; // Y측으로 이동할 거리를 저장할 곳
+    this.cardWidthX = 68; // 카드 넓이
+    this.cardheightY = 96; // 카드 높이
+    this.cardTempId = ''; // ID값 계산후 임시 저장
+      this.openCard = [];
+    this.cardList = [];
+    cardGame();
+}
+// 게임판 만들기
+function createBoard() {
+      var board = document.createElement("div" );
+     board.style.borderRadius= "10px";
+     board.style.backgroundImage = "url('board.jpg')";
+     board.s( 'id','board' );
+    board.style.width= '710px';
+      /* board.style.float = 'left';  */
+  
+     board.style.display = 'inline-block';
+     eboard.style.padding = '10px';
+     document.getElementById( "gameboard");
+    gameboard.appendChild(board);
+}
+
+function cardGame() { // max개의 난수 함수
+   for ( var i = 1; i <= max; i++) {
+        maxArr[i] = Math.random() + '-' + i; //난수 idx값 생성
+  }
+  maxArr = maxArr.sort();
+  createBoard(); // 카드 만들기전 게임판 생성
+   for ( var i=0; i<max; i++) {
+        var tmp = maxArr[i].split("-" ); //난수에서 사용될 실제  idx값 분리
+      //realArr[i] = (tmp[1] <10) ? '0' + tmp[1] : tmp[1];  // 10이하 앞에 0붙여주기
+        realArr[i] = tmp[1];
+       
+        <!--------------------2카드의 짝만들기----------------------->
+         if (realArr[i] <= half) {
+            matchArr[i] = realArr[i] + ":" + (Number(realArr[i]) + half);
+            console.log(matchArr[i]); 
+        } else{
+            matchArr[i] = (Number(realArr[i]) - half) + ":" + realArr[i];
+            console.log(matchArr[i]);           
+        }
+        <!--------------------2카드의 짝만들기----------------------->
+       
+       
+         <!--------------------div만들기----------------------->
+         //div 객체 생성
+         var div = document.createElement("div" );  
+         div.innerText= realArr[i];     
+         div.style.margin= "10px";
+         div.style.width= cardWidthX+ "px";
+         div.style.height= cardheightY+ "px";
+         div.style. float= "left" ;
+         div.style.borderRadius= "3px";
+         div.setAttribute( 'id', realArr[i]);
+         div.setAttribute( 'class', matchArr[i]);
+         div.style.backgroundImage= "url('./cardboard.png')" ;
+         div.style.backgroundRepeat= "no-repeat";
+         div.style.backgroundPosition= "-544px -384px";           
+        
+              <!--------------------카드 뒤집기 이벤트----------------------->
+          div.addEventListener( 'click', function (){ 
+               
+                  flipCard( this.id,this .className);        
+               
+              /*    
+                 var fc = this.id;
+               openCard.push(fc);
+       
+                   if(openCard[0] == openCard[0]+half){
+                             alert("ok");
+                 }else{ alert("no")
+                 }
+               console.log(openCard);
+               */
+               
+                /* if(openCard.length == 2)
+               for(var i = 0 ; i<=openCard.length ; i++){
+               openCard.pop(openCard[i])}
+                 console.log(openCard.length);
+                  */
+                   
+               
+             
+                         
+                 
+                 
+              });
+              <!--------------------카드 뒤집기 이벤트-----------------------> 
+             
+         //** 바디의 마지막 자식으로 div 객체 추가
+           document.getElementById( 'board')
+            board.appendChild(div); // 생성한 게임판에 div올리기.
+       
+         <!--------------------div만들기----------------------->  
+  } 
+  document.getElementById( "StartBtn").style.display = "none" ;
+  document.getElementById( "newStartBtn").style.display = "inline"; 
+  return realArr; //반환
+}
+ 
+<!-------------------- 카드 뒤집기----------------------->
+
+
+function flipCard(cid,ccl){       
+     
+    console.log(cid, ccl);           
+    //event.srcElement => 이벤트 발생 객체
+    event.srcElement.style.backgroundImage= "url('./cardboard.png')" ;
+    event.srcElement.style.backgroundRepeat= "no-repeat";            
+/*  event.srcElement.style.backgroundPosition= "67px 95px";   */
+ //   event.srcElement.style.backgroundPositionX= "-68px";
+ //   event.srcElement.style.backgroundPositionY= "-96px"; 
+    event.srcElement.style. float = "left" ;  
+
+
+   
+      // alert( Math.floor(cid/cardMaxPX)+1 );
+
+
+      /*
+
+    this.max = max;               // 총 카드 수
+    this.half = max/2;            // 총 카드 수의 반
+    this.clickNum = 1;            // 카드 클릭 수저장(2회까지)
+    this.maxArr = new Array(max); // 난수 저장 배열
+    this.realArr = new Array();   // 게임에 사용될 숫자 배열
+    this.matchArr = new Array();  // 짝이될 카드 저장될 배열
+    this.matchChk = new Array();  // 작이될 카드 비교저장할
+    this.cardPosition = new Array(); // 카드 위치 정보 저장
+    this.cardMaxPX = 11; // X축 총 11장 이미지까지,8*5(뒷장이미지 고정임)
+    this.cardMaxPY = 5;  // Y축 총 5장 이미지까지, max 50장까지로 정함
+    this.cardPositionXY = '';
+    this.cardPX = ''; // X축으로 이동할 거리를 저장할 곳
+    this.cardPY = ''; // Y측으로 이동할 거리를 저장할 곳
+    this.cardWidthX = 68; // 카드 넓이
+    this.cardheightY = 96; // 카드 높이
+    this.cardTempId = ''; // ID값 계산후 임시 저장   
+      */
+     
+     
+     cardTempId = (cid>half) ? cid-half : cid; 
+   
+    if(cardTempId >= 45){ //5번째줄
+     cardPX = ((cardTempId-(cardMaxPX*4))*cardWidthX) - cardWidthX;
+     cardPY = cardheightY*4;      
+     cardPositionXY = "-"+cardPX+"px -" +cardPY+"px";
+     console.log( "4:====>"+cardPositionXY);
+    }else if(cardTempId <= 11){ //1번째줄
+     cardPX = (cardWidthX * cardTempId) - cardWidthX;
+     cardPY = cardheightY - cardheightY;        
+     cardPositionXY = "-"+cardPX+"px -" +cardPY+"px"; 
+     console.log( "1:====>"+cardPositionXY);     
+    }else if(cardTempId <= 22){ //2번째줄   
+     cardPX = ((cardTempId-cardMaxPX)*cardWidthX) - cardWidthX;
+     cardPY = cardheightY;   
+     cardPositionXY = "-"+cardPX+"px -" +cardPY+"px"; 
+     console.log( "2:====>"+cardPositionXY);
+    }else if(cardTempId <= 33){ //3번째줄
+     cardPX = ((cardTempId-(cardMaxPX*2))*cardWidthX) - cardWidthX;
+     cardPY = cardheightY*2;      
+     cardPositionXY = "-"+cardPX+"px -" +cardPY+"px";
+     console.log( "3:====>"+cardPositionXY);
+    }else if(cardTempId <= 44){ //4번째줄
+     cardPX = ((cardTempId-(cardMaxPX*3))*cardWidthX) - cardWidthX;
+     cardPY = cardheightY*3;      
+     cardPositionXY = "-"+cardPX+"px -" +cardPY+"px";
+     console.log( "4:====>"+cardPositionXY);
+    }else{
+     alert( "에러~~!");
+    }
+   
+
+     console.log(event.srcElement.style.backgroundPosition = cardPositionXY);
+   
+
+      /* alert(ccl.indexOf(cid)); */
+     
+//     console.log(event.srcElement.style.backgroundPosition = cardPositionXY);
+   
+/*   if(cid > cardMaxPX){
+          cardPX = cardWidthX * cid
+          cardPY = cardheightY * cid
+          console.log(cardPX);
+           console.log(event.srcElement.style.backgroundPosition= "-"+cardPX+"px -"+cardPY+"px");
+     }else{
+          console.log(cardPX);
+     } */
+     
+//   console.log(cardPX);
+//   console.log(cardPY);
+
+};
+
+<!-------------------- 카드 뒤집기-------------------------------->
+
+
+
+// 값 비교하기.
+
+/* function clickNum(c){
+     var fc = document.getElementById(c)
+     openCardList.push(fc);
+     /* if(openCardList.length == 2) return; */
+
+
+/* function compareId(fc,sc){
+     var fc;
+     var sc;
+     console.log(fc.sc);
+     if(fc == (fc+(sc/2)) )
+          alert("맞아");
+     else
+          alert("틀려");
+     
+};
+ */
+
+
+</script>
+     <form method= "post">
+          <div id= "pannel">
+              <div id= "navigation">
+                   <p>
+                        [ 100장 이하의 카드 수를 <em>짝수</em>로 입력하세요!! ]
+                   </p>
+                   <input type= "text" name ="card_su" id="cardSu" value= "32"> <input
+                         type="button" id= "StartBtn" class="btns" value= "Start Game"
+                         onclick="NewCardGame(form.card_su.value)" > <input
+                         type="button" id= "newStartBtn" class="btns" value= "Refresh"
+                         onclick="javascript:location.reload();" >
+// ~~~.onclick = null; onclick 속성에대해 이벤트 취소           
+ </div>
+          </div>
+          <div id= "gameboard"></div>
+     </form>
+</body>c
 </html>
